@@ -211,7 +211,7 @@ public class GamePanel extends JPanel {
     private void renderNextRound(Graphics g) {
         g.setColor(Color.BLACK);
         g.setFont(new Font("Times New Roman", Font.BOLD, 18));
-        g.drawString("Level Up", 360, 20);
+        g.drawString("Next Round", 360, 20);
     }
 
     public void setCameraPosition(int cameraX, int cameraY) {

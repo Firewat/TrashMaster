@@ -42,6 +42,7 @@ public class StartScreen extends JPanel {
                 window.add(gamePanel);
                 window.revalidate();
                 window.repaint();
+                gamePanel.requestFocusInWindow();
                 gamePanel.startGame(); // Start the game
             }
         });

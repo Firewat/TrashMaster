@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 public class StartScreen extends JPanel {
     private JButton playButton;
-    private JButton helpButton;
+    private JButton controlsButton;
     private JButton highscoreButton;
     public JFrame window;
 
@@ -20,14 +20,14 @@ public class StartScreen extends JPanel {
 
         // Create buttons with images
         playButton = new JButton(new ImageIcon("res/button/start_game.png"));
-        helpButton = new JButton(new ImageIcon("res/button/controlss.png"));
+        controlsButton = new JButton(new ImageIcon("res/button/controlss.png"));
         highscoreButton = new JButton(new ImageIcon("res/button/highscore.png"));
 
         // Remove default button styling
         playButton.setBorderPainted(false);
         playButton.setContentAreaFilled(false);
-        helpButton.setBorderPainted(false);
-        helpButton.setContentAreaFilled(false);
+        controlsButton.setBorderPainted(false);
+        controlsButton.setContentAreaFilled(false);
         highscoreButton.setBorderPainted(false);
         highscoreButton.setContentAreaFilled(false);
 
@@ -47,10 +47,15 @@ public class StartScreen extends JPanel {
             }
         });
 
-        helpButton.addActionListener(new ActionListener() {
+        controlsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Implement action for help button
+                window.getContentPane().removeAll();
+                ControlsScreen controlsScreen = new ControlsScreen(window);
+                controlsScreen.setPreferredSize(new Dimension(720, 540));
+                window.add(controlsScreen);
+                window.revalidate();
+                window.repaint();
             }
         });
 
@@ -60,7 +65,7 @@ public class StartScreen extends JPanel {
                 window.getContentPane().removeAll();
                 //JLabel background = new JLabel(new ImageIcon("res/background/background2.jpg"));
 
-                HighScoreScreen highScoreScreen = new HighScoreScreen();
+                HighScoreScreen highScoreScreen = new HighScoreScreen(window);
                 highScoreScreen.setPreferredSize(new Dimension(720, 540));
                 window.add(highScoreScreen);
                 window.revalidate();
@@ -71,7 +76,7 @@ public class StartScreen extends JPanel {
 
         // Add buttons to panel
         background.add(playButton);
-        background.add(helpButton);
+        background.add(controlsButton);
         background.add(highscoreButton);
     }
 }

@@ -16,7 +16,8 @@ public class GamePanel extends JPanel {
     public static int MAP_WIDTH = 20;
     public static int MAP_HEIGHT = 15;
     private double movementSpeed = 0.33;
-
+    private String playerName;
+    private HighScoreScreen highScoreScreen;
     private Player player;
     private List<Trash> trashItems;
     private Tile[][] worldMap;
@@ -29,8 +30,13 @@ public class GamePanel extends JPanel {
     private int round = 1;
     private Timer gameTimer;
     private boolean displayNextRound = false;
+
+
     public GamePanel(JFrame window) {
+
+        this.highScoreScreen = new HighScoreScreen(window);
         this.window = window;
+        promptForName();
         int mapWidth = 0;
         int mapHeight = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader("res/map/worldmap.txt"))) {
@@ -70,6 +76,13 @@ public class GamePanel extends JPanel {
         cameraX = (int) (player.getX() * TILE_SIZE - window.getWidth() / 2);
         cameraY = (int) (player.getY() * TILE_SIZE - window.getHeight() / 2);
         new Timer(1000 / 60, e -> update()).start();
+    }
+
+    private void promptForName() {
+        playerName = JOptionPane.showInputDialog(this, "Enter your name:", "Player Name", JOptionPane.PLAIN_MESSAGE);
+        if (playerName == null || playerName.trim().isEmpty()) {
+            playerName = "Anonymous";
+        }
     }
 
     private void initializeTrashItems() {
@@ -215,9 +228,11 @@ public class GamePanel extends JPanel {
     }
 
     public void setCameraPosition(int cameraX, int cameraY) {
-        this.cameraX = cameraX;
-        this.cameraY = cameraY;
-    }
+        int maxCameraX = Math.max(0, MAP_WIDTH * TILE_SIZE - window.getWidth());
+        int maxCameraY = Math.max(0, MAP_HEIGHT * TILE_SIZE - window.getHeight());
+
+        this.cameraX = Math.max(0, Math.min(cameraX, maxCameraX));
+        this.cameraY = Math.max(0, Math.min(cameraY, maxCameraY));}
 
     public void startGame() {
         gameTimer = new Timer(1000, e -> {
@@ -278,6 +293,8 @@ public class GamePanel extends JPanel {
         gameTimer.stop();
         JOptionPane.showMessageDialog(this, "Game Over! Du hast es bis Runde " + round + " geschafft", "Game Over", JOptionPane.INFORMATION_MESSAGE);
 
+        highScoreScreen.updateHighScores(playerName, round);
+
         int response = JOptionPane.showConfirmDialog(this, "Willst du nochmal spielen?", "Erneut Versuchen", JOptionPane.YES_NO_OPTION);
         if (response == JOptionPane.YES_OPTION) {
             resetGame();
@@ -289,6 +306,11 @@ public class GamePanel extends JPanel {
 
     public void update() {
         player.move(player.getDx() * movementSpeed, player.getDy() * movementSpeed);
+
+        // Clamp player's position within the map boundaries
+        player.setX(Math.max(0, Math.min(player.getX(), MAP_WIDTH - 1)));
+        player.setY(Math.max(0, Math.min(player.getY(), MAP_HEIGHT - 2)));
+
         int cameraX = (int) (player.getX() * TILE_SIZE - window.getWidth() / 2 + TILE_SIZE / 2);
         int cameraY = (int) (player.getY() * TILE_SIZE - window.getHeight() / 2 + TILE_SIZE / 2);
         setCameraPosition(cameraX, cameraY);

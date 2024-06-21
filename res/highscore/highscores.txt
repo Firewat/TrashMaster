@@ -1,2 +1,5 @@
-Lasse: 1
-Lasse: 0
+lasö: 14
+lasse: 3
+lasö: 2
+lasö: 1
+lasse: 0

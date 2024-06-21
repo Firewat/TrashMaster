@@ -112,16 +112,16 @@ public class GamePanel extends JPanel {
         List<String> collectibleCategories = Arrays.asList("gelber müll", "sondermüll", "papier müll", "glas müll");
         trashTypeToCollect = collectibleCategories.get((int) (Math.random() * collectibleCategories.size()));
 
-/// Initialize 5 trash items of the current category
-        for (int i = 0; i < 5; i++) {
-            int x = (int) (Math.random() * MAP_WIDTH);
-            int y = (int) (Math.random() * MAP_HEIGHT);
-            String itemName = getRandomItemNameOfCategory(trashTypeToCollect);
-            trashItems.add(new Trash(x, y, "res/items/" + itemName + ".png", itemName, trashTypeToCollect));
-        }
+///// Initialize 5 trash items of the current category
+//        for (int i = 0; i < 5; i++) {
+//            int x = (int) (Math.random() * MAP_WIDTH);
+//            int y = (int) (Math.random() * MAP_HEIGHT);
+//            String itemName = getRandomItemNameOfCategory(trashTypeToCollect);
+//            trashItems.add(new Trash(x, y, "res/items/" + itemName + ".png", itemName, trashTypeToCollect));
+//        }
 
         // Initialize remaining trash items randomly
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 100; i++) {
             int x = (int) (Math.random() * MAP_WIDTH);
             int y = (int) (Math.random() * MAP_HEIGHT);
             String itemName = trashTypes[(int) (Math.random() * trashTypes.length)];
@@ -236,7 +236,10 @@ public class GamePanel extends JPanel {
 
     public void startGame() {
         gameTimer = new Timer(1000, e -> {
-            roundTime--;
+            /*if (round == 0) {
+                gameOver();
+            }*/
+                roundTime--;
             if (roundTime <= 0) {
                 lives--;
                 resetGameTime();
@@ -255,7 +258,7 @@ public class GamePanel extends JPanel {
         lives--;
         player.resetMovement();
         roundTime = 30;
-        round = 0;
+        //round = 1;
         collectedItems = 0;
         //lives = 3; // Reset lives to initial value
         trashItems.clear(); // Clear all trash items

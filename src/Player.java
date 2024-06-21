@@ -140,16 +140,16 @@ public class Player {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        if (key == KeyEvent.VK_LEFT) {
+        if (key == KeyEvent.VK_A) {
             dx = -1;
             dy = 0;
-        } else if (key == KeyEvent.VK_RIGHT) {
+        } else if (key == KeyEvent.VK_D) {
             dx = 1;
             dy = 0;
-        } else if (key == KeyEvent.VK_UP) {
+        } else if (key == KeyEvent.VK_W) {
             dx = 0;
             dy = -1;
-        } else if (key == KeyEvent.VK_DOWN) {
+        } else if (key == KeyEvent.VK_S) {
             dx = 0;
             dy = 1;
         }
@@ -158,9 +158,9 @@ public class Player {
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
 
-        if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_RIGHT) {
+        if (key == KeyEvent.VK_A || key == KeyEvent.VK_D) {
             dx = 0;
-        } else if (key == KeyEvent.VK_UP || key == KeyEvent.VK_DOWN) {
+        } else if (key == KeyEvent.VK_W || key == KeyEvent.VK_S) {
             dy = 0;
         }
     }

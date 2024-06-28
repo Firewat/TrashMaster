@@ -1,5 +1,5 @@
 lasö: 14
 lasse: 3
-lasö: 2
-lasö: 1
-lasse: 0
+ss: 2
+ss: 1
+lasserichtig: 0

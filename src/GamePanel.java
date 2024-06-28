@@ -11,14 +11,13 @@ import java.util.List;
 
 public class GamePanel extends JPanel {
     private Map<String, String> trashCategories;
-    private JFrame window;
+    private final JFrame window;
     public static final int TILE_SIZE = 32;
     public static int MAP_WIDTH = 20;
     public static int MAP_HEIGHT = 15;
-    private double movementSpeed = 0.33;
     private String playerName;
-    private HighScoreScreen highScoreScreen;
-    private Player player;
+    private final HighScoreScreen highScoreScreen;
+    private final Player player;
     private List<Trash> trashItems;
     private Tile[][] worldMap;
     private int cameraX;
@@ -30,15 +29,21 @@ public class GamePanel extends JPanel {
     private int round = 1;
     private Timer gameTimer;
     private boolean displayNextRound = false;
+    int mapWidth = 0;
+    int mapHeight = 0;
 
-
+//////////////////////////////KONSTRUKTOR///////////////////////////////////////////////
     public GamePanel(JFrame window) {
-
-        this.highScoreScreen = new HighScoreScreen(window);
-        this.window = window;
+        //highscore init
         promptForName();
-        int mapWidth = 0;
-        int mapHeight = 0;
+        this.highScoreScreen = new HighScoreScreen(window);
+
+
+
+        // window init
+        this.window = window;
+
+        //world init
         try (BufferedReader reader = new BufferedReader(new FileReader("res/map/worldmap.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -48,13 +53,25 @@ public class GamePanel extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        //local variables init
         MAP_WIDTH = mapWidth;
         MAP_HEIGHT = mapHeight;
+        initializeWorldMap();
 
+
+        //spieler und kamera init
+        player = new Player((double) MAP_WIDTH / 2, (double) MAP_HEIGHT / 2,
+                "res/player/player3.png", this);
+        cameraX = (int) (player.getX() * TILE_SIZE - window.getWidth() / 2);
+        cameraY = (int) (player.getY() * TILE_SIZE - window.getHeight() / 2);
+
+        // Timer init
+        new Timer(1000 / 60, e -> update()).start();
+
+        //Screen so gross wie Map machen
         setPreferredSize(new Dimension(MAP_WIDTH * TILE_SIZE, MAP_HEIGHT * TILE_SIZE));
-        player = new Player((double) MAP_WIDTH / 2, (double) MAP_HEIGHT / 2, "res/player/player3.png", this);
 
+        //KeyPressed init
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -67,24 +84,47 @@ public class GamePanel extends JPanel {
             }
         });
 
+        //bug fix, damit Kamera und Spieler geupdated werden
         setFocusable(true);
 
-        trashCategories = new HashMap<>(); // Initialize trashCategories here
+        //Müll init
+        trashCategories = new HashMap<>();
         initializeTrashItems();
-        initializeWorldMap();
 
-        cameraX = (int) (player.getX() * TILE_SIZE - window.getWidth() / 2);
-        cameraY = (int) (player.getY() * TILE_SIZE - window.getHeight() / 2);
-        new Timer(1000 / 60, e -> update()).start();
+
+
+
+
+
     }
 
-    private void promptForName() {
-        playerName = JOptionPane.showInputDialog(this, "Enter your name:", "Player Name", JOptionPane.PLAIN_MESSAGE);
-        if (playerName == null || playerName.trim().isEmpty()) {
-            playerName = "Anonymous";
+    //////////////////////////METHODEN///////////////////////////////////////////////
+
+    //Methode um WeltKarte zu generieren
+    private void initializeWorldMap() {
+        worldMap = new Tile[MAP_HEIGHT][MAP_WIDTH];
+        try (BufferedReader reader = new BufferedReader(new FileReader("res/map/worldmap.txt"))) {
+            String[] tileTypes = {"type1", "type2", "type3", "type4", "type5", "type6", "type7", "type8", "type9",
+                    "type10", "type11", "type12", "type13", "type14", "type15", "type16", "type17"};
+            String line;
+            int row = 0;
+            while ((line = reader.readLine()) != null && row < MAP_HEIGHT) {
+                for (int col = 0; col < line.length() && col < MAP_WIDTH; col++) {
+                    int type = Character.getNumericValue(line.charAt(col));
+                    if (type > 0) {
+                        worldMap[row][col] = new Tile("res/worldtiles/" + tileTypes[type - 1] + ".png", type);
+                    } else {
+                        worldMap[row][col] = new Tile("res/worldtiles/" + tileTypes[1] + ".png", 2);
+                    }
+                }
+                row++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    // Müll wird generiert und in die Liste trashItems eingefügt
     private void initializeTrashItems() {
         trashItems = new ArrayList<>();
         Map<String, String> trashCategories = new HashMap<>();
@@ -105,93 +145,55 @@ public class GamePanel extends JPanel {
         trashCategories.put("waschmittel", "gelber müll");
         trashCategories.put("zeitung", "papier müll");
 
-// Define trash types
-        String[] trashTypes = {"aludose", "aludose_gross", "bierflasche", "coladose", "glasbehälter", "glasflasche", "karton", "papbecher", "paptüte", "pizzakarton", "plastikflasche", "plastikflasche_gross", "spraydose", "Tasse", "waschmittel", "zeitung"};
+        //mögliche Müllarten (nicht optimal gelöst)
+        String[] trashTypes = {"aludose", "aludose_gross", "bierflasche", "coladose", "glasbehälter", "glasflasche",
+                "karton", "papbecher", "paptüte", "pizzakarton", "plastikflasche", "plastikflasche_gross",
+                "spraydose", "Tasse", "waschmittel", "zeitung"};
 
-// Define collectible categories
+        //mögliche Müllkategorien (nicht optimal gelöst)
         List<String> collectibleCategories = Arrays.asList("gelber müll", "sondermüll", "papier müll", "glas müll");
         trashTypeToCollect = collectibleCategories.get((int) (Math.random() * collectibleCategories.size()));
 
-///// Initialize 5 trash items of the current category
-//        for (int i = 0; i < 5; i++) {
-//            int x = (int) (Math.random() * MAP_WIDTH);
-//            int y = (int) (Math.random() * MAP_HEIGHT);
-//            String itemName = getRandomItemNameOfCategory(trashTypeToCollect);
-//            trashItems.add(new Trash(x, y, "res/items/" + itemName + ".png", itemName, trashTypeToCollect));
-//        }
+        //nicht zweimal an einem ort müll generieren
+        Set<Point> usedPositions = new HashSet<>();
 
-        // Initialize remaining trash items randomly
+        //Müllgenerierung (100 Stück)
         for (int i = 0; i < 100; i++) {
-            int x = (int) (Math.random() * MAP_WIDTH);
-            int y = (int) (Math.random() * MAP_HEIGHT);
+            int x, y;
+            Point pos;
+            do {
+                x = (int) (Math.random() * MAP_WIDTH);
+                y = (int) (Math.random() * MAP_HEIGHT);
+                pos = new Point(x, y);
+            } while (usedPositions.contains(pos));
+
+            usedPositions.add(pos);
             String itemName = trashTypes[(int) (Math.random() * trashTypes.length)];
             String category = trashCategories.get(itemName);
             trashItems.add(new Trash(x, y, "res/items/" + itemName + ".png", itemName, category));
         }
-// Randomly select a trash type to collect from collectible categories
+
+        //Müll für die "Quest" wird generiert
         trashTypeToCollect = collectibleCategories.get((int) (Math.random() * collectibleCategories.size()));
     }
-    private String getRandomItemNameOfCategory(String category) {
-        List<String> itemsOfCategory = new ArrayList<>();
-        for (Map.Entry<String, String> entry : trashCategories.entrySet()) {
-            if (entry.getValue().equals(category)) {
-                itemsOfCategory.add(entry.getKey());
+
+
+        //Methode um zufälliges Müll-Objekt zu generieren
+        private String getRandomItemNameOfCategory(String category) {
+            List<String> itemsOfCategory = new ArrayList<>();
+            for (Map.Entry<String, String> entry : trashCategories.entrySet()) {
+                if (entry.getValue().equals(category)) {
+                    itemsOfCategory.add(entry.getKey());
             }
         }
         if (!itemsOfCategory.isEmpty()) {
             return itemsOfCategory.get((int) (Math.random() * itemsOfCategory.size()));
         } else {
-            return null; // Return null or some default value if there are no items of the current category
-        }
-    }
-    private void initializeWorldMap() {
-        worldMap = new Tile[MAP_HEIGHT][MAP_WIDTH];
-        try (BufferedReader reader = new BufferedReader(new FileReader("res/map/worldmap.txt"))) {
-            String[] tileTypes = {"type1", "type2", "type3", "type4", "type5", "type6", "type7", "type8", "type9", "type10", "type11", "type12", "type13", "type14", "type15", "type16", "type17"};
-            String line;
-            int row = 0;
-            while ((line = reader.readLine()) != null && row < MAP_HEIGHT) {
-                for (int col = 0; col < line.length() && col < MAP_WIDTH; col++) {
-                    int type = Character.getNumericValue(line.charAt(col));
-                    if (type > 0) {
-                        worldMap[row][col] = new Tile("res/worldtiles/" + tileTypes[type - 1] + ".png", type);
-                    } else {
-                        worldMap[row][col] = new Tile("res/worldtiles/" + tileTypes[1] + ".png", 2);
-                    }
-                }
-                row++;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        renderWorld(g);
-        renderTrash(g);
-        if (displayNextRound) {
-            renderNextRound(g);
-        }
-        renderHUD(g);
-        renderCat(g);
-        renderPlayer(g);
-    }
-
-    private void renderTrash(Graphics g) {
-        for (Trash trash : trashItems) {
-            int x = trash.getX() * TILE_SIZE - cameraX;
-            int y = trash.getY() * TILE_SIZE - cameraY;
-            g.drawImage(trash.getImage(), x, y, TILE_SIZE, TILE_SIZE, this);
-        }
-    }
-
-    private void renderPlayer(Graphics g) {
-        int x = (int) (player.getX() * TILE_SIZE - cameraX);
-        int y = (int) (player.getY() * TILE_SIZE - cameraY);
-        g.drawImage(player.getImage(), x, y, this);
-    }
+//////////RENDER METHODEN///////////////////////////////////////////////
 
     private void renderWorld(Graphics g) {
         int startRow = Math.max(0, cameraY / TILE_SIZE);
@@ -206,7 +208,23 @@ public class GamePanel extends JPanel {
             }
         }
     }
+    //Methode um Müll zu rendern
+    private void renderTrash(Graphics g) {
+        for (Trash trash : trashItems) {
+            int x = trash.getX() * TILE_SIZE - cameraX;
+            int y = trash.getY() * TILE_SIZE - cameraY;
+            g.drawImage(trash.getImage(), x, y, TILE_SIZE, TILE_SIZE, this);
+        }
+    }
 
+    //Methode um Spieler zu rendern
+    private void renderPlayer(Graphics g) {
+        int x = (int) (player.getX() * TILE_SIZE - cameraX);
+        int y = (int) (player.getY() * TILE_SIZE - cameraY);
+        g.drawImage(player.getImage(), x, y, this);
+    }
+
+    //Methode um HUD zu rendern
     private void renderHUD(Graphics g) {
         g.setColor(Color.BLACK);
         g.setFont(new Font("Times New Roman", Font.BOLD, 18));
@@ -216,17 +234,39 @@ public class GamePanel extends JPanel {
         //g.drawString("Kategorie: " + trashTypeToCollect, 10, 80);
         g.drawString("Zeit: " + roundTime, 10, 100);
     }
+
+    //Methode um Kategorie zu rendern
     private void renderCat(Graphics g) {
         g.setColor(Color.RED);
         g.setFont(new Font("Times New Roman", Font.BOLD, 18));
         g.drawString("Kategorie: " + trashTypeToCollect, 10, 80);
     }
+
+    //Methode um nächste Runde zu rendern
     private void renderNextRound(Graphics g) {
         g.setColor(Color.BLACK);
         g.setFont(new Font("Times New Roman", Font.BOLD, 18));
         g.drawString("Next Round", 360, 20);
     }
 
+
+    //paintComponent Methode (Herzstück des Renderings)
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        renderWorld(g);
+        renderPlayer(g);
+        renderTrash(g);
+        renderHUD(g);
+        renderCat(g);
+        if (displayNextRound) {
+            renderNextRound(g);
+        }
+
+    }
+
+
+    //////////////////KAMERA POSITIONIERUNG///////////////////////////////////////////////
     public void setCameraPosition(int cameraX, int cameraY) {
         int maxCameraX = Math.max(0, MAP_WIDTH * TILE_SIZE - window.getWidth());
         int maxCameraY = Math.max(0, MAP_HEIGHT * TILE_SIZE - window.getHeight());
@@ -234,6 +274,8 @@ public class GamePanel extends JPanel {
         this.cameraX = Math.max(0, Math.min(cameraX, maxCameraX));
         this.cameraY = Math.max(0, Math.min(cameraY, maxCameraY));}
 
+
+    //////////////////SPIEL START UND BEENDEN METHODEN////////////////////////////////////
     public void startGame() {
         gameTimer = new Timer(1000, e -> {
             /*if (round == 0) {
@@ -254,24 +296,25 @@ public class GamePanel extends JPanel {
         gameTimer.start();
     }
 
+    //////// METHODEN ZUM SPIELABLAUF/////////////////////////////////////
     private void resetGameTime() {
         lives--;
         player.resetMovement();
         roundTime = 30;
         //round = 1;
         collectedItems = 0;
-        //lives = 3; // Reset lives to initial value
-        trashItems.clear(); // Clear all trash items
-        player.getInventory().clear(); // Clear player's inventory
-        player.setPosition(MAP_WIDTH / 2, MAP_HEIGHT / 2); // Reset player's position
-        initializeTrashItems(); // Initialize trash items for the new game
+        //lives = 3;
+        trashItems.clear();
+        player.getInventory().clear();
+        player.setPosition(MAP_WIDTH / 2, MAP_HEIGHT / 2);
+        initializeTrashItems();
     }
 
-
+    // nächste Runde starten
     public void nextRound() {
         //this.displayNextRound = displayNextRound ;
         displayNextRound = true;
-        new Timer(3000, e -> displayNextRound = false).start(); // Hide the image after 1 second
+        new Timer(3000, e -> displayNextRound = false).start();
         round++;
         collectedItems = 0;
         roundTime = 30 - round;
@@ -281,36 +324,45 @@ public class GamePanel extends JPanel {
        // player.setPosition(MAP_WIDTH / 2, MAP_HEIGHT / 2);
         repaint();
     }
+
+    // Spiel zurücksetzen
     public void resetGame() {
         player.resetMovement();
         roundTime = 30;
         round = 0;
         collectedItems = 0;
-        lives = 3; // Reset lives to initial value
-        trashItems.clear(); // Clear all trash items
-        player.getInventory().clear(); // Clear player's inventory
-        player.setPosition(MAP_WIDTH / 2, MAP_HEIGHT / 2); // Reset player's position
-        initializeTrashItems(); // Initialize trash items for the new game
+        lives = 3;
+        trashItems.clear();
+        player.getInventory().clear();
+        player.setPosition(MAP_WIDTH / 2, MAP_HEIGHT / 2);
+        initializeTrashItems();
     }
+
+    // Spiel beenden/verloren/vorbei
     public void gameOver() {
         gameTimer.stop();
-        JOptionPane.showMessageDialog(this, "Game Over! Du hast es bis Runde " + round + " geschafft", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Spiel Vorbei! Du hast es bis Runde " + round +
+                " geschafft", "Game Over", JOptionPane.INFORMATION_MESSAGE);
 
-        highScoreScreen.updateHighScores(playerName, round);
 
-        int response = JOptionPane.showConfirmDialog(this, "Willst du nochmal spielen?", "Erneut Versuchen", JOptionPane.YES_NO_OPTION);
+        int response = JOptionPane.showConfirmDialog(this, "Willst du nochmal spielen?",
+                "Erneut Versuchen", JOptionPane.YES_NO_OPTION);
         if (response == JOptionPane.YES_OPTION) {
             resetGame();
             startGame();
         } else {
             window.dispose();
         }
+        highScoreScreen.updateHighScores(playerName, round);
     }
 
+
+    ///UPDATE METHODE (SPIELER BEWEGUNG, KAMERA, MÜLL EINSAMMELN, ETC.)//////////////////////
     public void update() {
+        double movementSpeed = 0.33;
         player.move(player.getDx() * movementSpeed, player.getDy() * movementSpeed);
 
-        // Clamp player's position within the map boundaries
+        // Spieler kommt nicht weiter als Kartenlimits
         player.setX(Math.max(0, Math.min(player.getX(), MAP_WIDTH - 1)));
         player.setY(Math.max(0, Math.min(player.getY(), MAP_HEIGHT - 2)));
 
@@ -341,11 +393,22 @@ public class GamePanel extends JPanel {
         repaint();
     }
 
+
+    //Getter Methoden und misc. Methoden
     public int getTileSize() {
+
         return TILE_SIZE;
     }
 
     public Trash[] getTrashItems() {
+
         return trashItems.toArray(new Trash[0]);
+    }
+
+    private void promptForName() {
+        playerName = JOptionPane.showInputDialog(this, "Gebe deinen Namen ein: ", "Spieler Name", JOptionPane.PLAIN_MESSAGE);
+        if (playerName == null || playerName.trim().isEmpty()) {
+            playerName = "Anonymous";
+        }
     }
 }

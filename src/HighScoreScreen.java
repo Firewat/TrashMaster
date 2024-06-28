@@ -1,69 +1,31 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.*;
 
 public class HighScoreScreen extends JPanel {
-    private JFrame window;
-    private JTextArea highScores;
+    private final JFrame window;
+    private final JTextArea highScores;
 
     public HighScoreScreen(JFrame window) {
         this.window = window;
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-
-        JLabel background = new JLabel(new ImageIcon("res/background/background2.jpg"));
-        gbc.gridx = -1; // Move background to the left by one cell
-        gbc.gridy = 0;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        add(background, gbc);
-        background.setLayout(new GridBagLayout());
+        setLayout(new BorderLayout());
 
         JLabel title = new JLabel("High Scores", SwingConstants.CENTER);
         title.setFont(new Font("Times New Roman", Font.BOLD, 24));
-        gbc.gridx = 360;
-        gbc.gridy = -1;
-        gbc.weightx = 360;
-        gbc.weighty = 0.1;
-        gbc.fill = GridBagConstraints.BOTH;
-        background.add(title, gbc);
+        add(title, BorderLayout.NORTH);
 
         highScores = new JTextArea();
         highScores.setFont(new Font("Times New Roman", Font.PLAIN, 20));
         highScores.setEditable(false);
-        highScores.setOpaque(false);
         loadHighScores();
-        gbc.gridx = 360;
-        gbc.gridy = 0;
-        gbc.weighty = 0.9;
-        background.add(highScores, gbc);
+        add(new JScrollPane(highScores), BorderLayout.CENTER);
 
         JButton backButton = new JButton(new ImageIcon("res/button/back.png"));
         backButton.setPreferredSize(new Dimension(100, 50));
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (window != null) {
-                    window.getContentPane().removeAll();
-                    StartScreen startScreen = new StartScreen(window);
-                    startScreen.setPreferredSize(new Dimension(720, 540));
-                    window.add(startScreen);
-                    window.revalidate();
-                    window.repaint();
-                } else {
-                    System.out.println("Window is null");
-                }
-            }
-        });
-
-        gbc.gridx = 360;
-        gbc.gridy = 1;
-        gbc.weighty = 0.1;
-        background.add(backButton, gbc);
+        backButton.addActionListener(e -> navigateToStartScreen());
+        add(backButton, BorderLayout.SOUTH);
     }
 
     private void loadHighScores() {
@@ -97,7 +59,7 @@ public class HighScoreScreen extends JPanel {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("res/highscore/highscores.txt"))) {
             int count = 0;
             for (Map.Entry<Integer, String> entry : scoresMap.entrySet()) {
-                if (count >= 10) break; // Keep only top 10 scores
+                if (count >= 10) break;
                 writer.write(entry.getValue() + ": " + entry.getKey());
                 writer.newLine();
                 count++;
@@ -107,5 +69,18 @@ public class HighScoreScreen extends JPanel {
         }
 
         loadHighScores();
+    }
+
+    private void navigateToStartScreen() {
+        if (window != null) {
+            window.getContentPane().removeAll();
+            StartScreen startScreen = new StartScreen(window);
+            startScreen.setPreferredSize(new Dimension(720, 540));
+            window.add(startScreen);
+            window.revalidate();
+            window.repaint();
+        } else {
+            System.out.println("Window is null");
+        }
     }
 }

@@ -16,7 +16,7 @@ public class ControlsScreen extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
 
         JLabel background = new JLabel(new ImageIcon("res/background/background2.jpg"));
-        gbc.gridx = -1; // Move background to the left by one cell
+        gbc.gridx = -1;
         gbc.gridy = 0;
         gbc.weightx = 1;
         gbc.weighty = 1;

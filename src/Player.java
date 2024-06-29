@@ -9,16 +9,12 @@ public class Player {
     private double y;
     private double dx;
     private double dy;
-    private GamePanel gamePanel;
-    private List<Trash> inventory;
-    private Image imageLeft1;
-    private Image imageLeft2;
-    private Image imageRight1;
-    private Image imageRight2;
-    private Image imageUp1;
-    private Image imageUp2;
-    private Image imageDown1;
-    private Image imageDown2;
+    private final GamePanel gamePanel;
+    private final List<Trash> inventory;
+    private final Image imageLeft1;
+    private final Image imageLeft2;
+    private final Image imageRight1;
+    private final Image imageRight2;
     private int moveCounter = 0;
     private Image image;
     private Direction direction;
@@ -44,10 +40,10 @@ public class Player {
         this.imageLeft2 = new ImageIcon("res/player/player6.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
         this.imageRight1 = new ImageIcon("res/player/player3.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
         this.imageRight2 = new ImageIcon("res/player/player4.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        this.imageUp1 = new ImageIcon("res/player/player7.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        this.imageUp2 = new ImageIcon("res/player/player8.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        this.imageDown1 = new ImageIcon("res/player/player1.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        this.imageDown2 = new ImageIcon("res/player/player2.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        Image imageUp1 = new ImageIcon("res/player/player7.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        Image imageUp2 = new ImageIcon("res/player/player8.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        Image imageDown1 = new ImageIcon("res/player/player1.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        Image imageDown2 = new ImageIcon("res/player/player2.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
         this.image = imageRight1;
         this.direction = Direction.NONE;
     }
@@ -61,10 +57,10 @@ public class Player {
         double newY = y + dy;
 
         // Check boundaries
-        if (newX >= 0 && newX < gamePanel.MAP_WIDTH) {
+        if (newX >= 0 && newX < GamePanel.MAP_WIDTH) {
             x = newX;
         }
-        if (newY >= 0 && newY < gamePanel.MAP_HEIGHT) {
+        if (newY >= 0 && newY < GamePanel.MAP_HEIGHT) {
             y = newY;
         }
 
@@ -186,8 +182,8 @@ public class Player {
         int playerTileY = (int) y / tileSize;
 
         // Calculate the trash item's tile
-        int trashTileX = (int) trash.getX() / tileSize;
-        int trashTileY = (int) trash.getY() / tileSize;
+        int trashTileX =  trash.getX() / tileSize;
+        int trashTileY =  trash.getY() / tileSize;
 
         // Check if more than 50% of the player's tile overlaps with the trash item's tile
         return Math.abs(playerTileX - trashTileX) * 3 < tileSize && Math.abs(playerTileY - trashTileY) * 2 < tileSize;

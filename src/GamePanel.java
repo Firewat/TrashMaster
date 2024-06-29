@@ -343,15 +343,18 @@ public class GamePanel extends JPanel {
         gameTimer.stop();
         JOptionPane.showMessageDialog(this, "Spiel Vorbei! Du hast es bis Runde " + round +
                 " geschafft", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-
-
         int response = JOptionPane.showConfirmDialog(this, "Willst du nochmal spielen?",
                 "Erneut Versuchen", JOptionPane.YES_NO_OPTION);
         if (response == JOptionPane.YES_OPTION) {
             resetGame();
             startGame();
-        } else {
-            window.dispose();
+        } else if (response == JOptionPane.NO_OPTION){
+            window.getContentPane().removeAll();
+            StartScreen startScreen = new StartScreen(window);
+            startScreen.setPreferredSize(new Dimension(720, 540));
+            window.add(startScreen);
+            window.revalidate();
+            window.repaint();
         }
         highScoreScreen.updateHighScores(playerName, round);
     }

@@ -1,5 +1,5 @@
 lasö: 14
 lasse: 3
 ss: 2
-ss: 1
-lasserichtig: 0
+Anonymous: 1
+Lasse: 0

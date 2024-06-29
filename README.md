@@ -2,15 +2,14 @@
 
 ## Overview
 
-**TrashMaster** is an engaging Java-based game where players navigate a virtual world to collect various types of trash while aiming to achieve the highest score possible. The game includes features such as player movement, trash collection, multiple rounds, lives, and high score tracking.
+**TrashMaster** is an Java-based game where players navigate a virtual world to collect various types of trash while aiming to achieve the highest score possible.
 
 ## Features
 
-- **Player Movement**: Control the player character using keyboard inputs.
+- **Player Movement**: Control the player character using W, A, S, D inputs.
 - **Trash Collection**: Collect various trash items scattered across the game world.
-- **High Score Tracking**: Track and display high scores for competitive play.
 - **Rounds and Lives**: Survive multiple rounds with limited lives, progressing through increasingly challenging levels.
-- **Interactive UI**: Includes a Heads-Up Display (HUD) and screens for controls and high scores.
+
 
 ### DISCLAIMER: THE GAME IS IN GERMAN!!!
 

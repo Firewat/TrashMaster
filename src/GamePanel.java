@@ -305,7 +305,7 @@ public class GamePanel extends JPanel {
         collectedItems = 0;
         //lives = 3;
         trashItems.clear();
-        player.getInventory().clear();
+        //player.getInventory().clear();
         player.setPosition(MAP_WIDTH / 2, MAP_HEIGHT / 2);
         initializeTrashItems();
     }
@@ -320,7 +320,7 @@ public class GamePanel extends JPanel {
         roundTime = 30 - round;
         trashTypeToCollect = trashItems.get((int) (Math.random() * trashItems.size())).getType();
         initializeTrashItems();
-        player.getInventory().clear();
+        //player.getInventory().clear();
        // player.setPosition(MAP_WIDTH / 2, MAP_HEIGHT / 2);
         repaint();
     }
@@ -329,11 +329,11 @@ public class GamePanel extends JPanel {
     public void resetGame() {
         player.resetMovement();
         roundTime = 30;
-        round = 0;
+        round = 1;
         collectedItems = 0;
         lives = 3;
         trashItems.clear();
-        player.getInventory().clear();
+        //player.getInventory().clear();
         player.setPosition(MAP_WIDTH / 2, MAP_HEIGHT / 2);
         initializeTrashItems();
     }
@@ -375,7 +375,7 @@ public class GamePanel extends JPanel {
 
         for (Trash trash : new ArrayList<>(trashItems)) {
             if ((int) player.getX() == trash.getX() && (int) player.getY() == trash.getY()) {
-                player.addToInventory(trash);
+                //player.addToInventory(trash);
                 trashItems.remove(trash);
                 if (trash.getCategory().equals(trashTypeToCollect)) {
                     collectedItems++;

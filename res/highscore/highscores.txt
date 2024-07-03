@@ -2,4 +2,4 @@ lasö: 14
 lasse: 3
 ss: 2
 Anonymous: 1
-Lasse: 0
+Anonymous: 0

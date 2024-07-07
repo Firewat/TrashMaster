@@ -92,10 +92,6 @@ public class GamePanel extends JPanel {
         initializeTrashItems();
 
 
-
-
-
-
     }
 
     //////////////////////////METHODEN///////////////////////////////////////////////

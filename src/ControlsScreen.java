@@ -13,13 +13,13 @@ public class ControlsScreen extends JPanel {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        // JTextArea for controls
+        // JTextArea erstellen
         JTextArea controlsScreen = new JTextArea();
         controlsScreen.setFont(new Font("Times New Roman", Font.PLAIN, 20));
         controlsScreen.setEditable(false);
         controlsScreen.setOpaque(false); // Make text area non-opaque
 
-        // Reading the controls text file
+        // einlesen der controls Text-Datei
         try (BufferedReader reader = new BufferedReader(new FileReader("src/res/controls/controls.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -30,7 +30,7 @@ public class ControlsScreen extends JPanel {
         }
         controlsScreen.setForeground(Color.black);
 
-        // Transparent scroll pane
+        // durchsichtiges panel
         JScrollPane scrollPane = new JScrollPane(controlsScreen);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
@@ -44,7 +44,7 @@ public class ControlsScreen extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         add(scrollPane, gbc);
 
-        // Adding backButton
+        // backbutton hinzufügen
         backButton = new JButton(new ImageIcon("src/res/button/back.png"));
         backButton.setPreferredSize(new Dimension(100, 50));
         backButton.addActionListener(e -> navigateToStartScreen());

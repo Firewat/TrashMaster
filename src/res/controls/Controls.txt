@@ -13,5 +13,5 @@ Bewege deinen Charakter mithilfe der W,A,S,D-Tasten,
 um den Müll zu finden und aufzusammeln.
 
 Sammle den richtigen Müll und vermeide falsche Gegenstände,
-um Leben zu sparen und das Spiel erfolgreich zu meistern.
+um Leben zu sparen und das Spiel erfolgreich zu meistern!
 

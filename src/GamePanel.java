@@ -44,7 +44,7 @@ public class GamePanel extends JPanel {
         this.window = window;
 
         //world init
-        try (BufferedReader reader = new BufferedReader(new FileReader("res/map/worldmap.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/res/map/worldmap.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 mapWidth = Math.max(mapWidth, line.length());
@@ -61,7 +61,7 @@ public class GamePanel extends JPanel {
 
         //spieler und kamera init
         player = new Player((double) MAP_WIDTH / 2, (double) MAP_HEIGHT / 2,
-                "res/player/player3.png", this);
+                "src/res/player/player3.png", this);
         cameraX = (int) (player.getX() * TILE_SIZE - window.getWidth() / 2);
         cameraY = (int) (player.getY() * TILE_SIZE - window.getHeight() / 2);
 
@@ -103,7 +103,7 @@ public class GamePanel extends JPanel {
     //Methode um WeltKarte zu generieren
     private void initializeWorldMap() {
         worldMap = new Tile[MAP_HEIGHT][MAP_WIDTH];
-        try (BufferedReader reader = new BufferedReader(new FileReader("res/map/worldmap.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/res/map/worldmap.txt"))) {
             String[] tileTypes = {"type1", "type2", "type3", "type4", "type5", "type6", "type7", "type8", "type9",
                     "type10", "type11", "type12", "type13", "type14", "type15", "type16", "type17"};
             String line;
@@ -112,9 +112,9 @@ public class GamePanel extends JPanel {
                 for (int col = 0; col < line.length() && col < MAP_WIDTH; col++) {
                     int type = Character.getNumericValue(line.charAt(col));
                     if (type > 0) {
-                        worldMap[row][col] = new Tile("res/worldtiles/" + tileTypes[type - 1] + ".png", type);
+                        worldMap[row][col] = new Tile("src/res/worldtiles/" + tileTypes[type - 1] + ".png", type);
                     } else {
-                        worldMap[row][col] = new Tile("res/worldtiles/" + tileTypes[1] + ".png", 2);
+                        worldMap[row][col] = new Tile("src/res/worldtiles/" + tileTypes[1] + ".png", 2);
                     }
                 }
                 row++;
@@ -170,7 +170,7 @@ public class GamePanel extends JPanel {
             usedPositions.add(pos);
             String itemName = trashTypes[(int) (Math.random() * trashTypes.length)];
             String category = trashCategories.get(itemName);
-            trashItems.add(new Trash(x, y, "res/items/" + itemName + ".png", itemName, category));
+            trashItems.add(new Trash(x, y, "src/res/items/" + itemName + ".png", itemName, category));
         }
 
         //Müll für die "Quest" wird generiert

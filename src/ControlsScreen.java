@@ -15,7 +15,7 @@ public class ControlsScreen extends JPanel {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        JLabel background = new JLabel(new ImageIcon("res/background/background2.jpg"));
+        JLabel background = new JLabel(new ImageIcon("src/res/background/background2.jpg"));
         gbc.gridx = -1;
         gbc.gridy = 0;
         gbc.weightx = 1;
@@ -39,7 +39,7 @@ public class ControlsScreen extends JPanel {
         controlsScreen.setFont(new Font("Times New Roman", Font.PLAIN, 20));
         controlsScreen.setEditable(false);
         controlsScreen.setOpaque(false);
-        try (BufferedReader reader = new BufferedReader(new FileReader("res/highscore/Controls.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/res/highscore/Controls.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 controlsScreen.append(line + "\n");
@@ -52,7 +52,7 @@ public class ControlsScreen extends JPanel {
         gbc.weighty = 0.9;
         background.add(controlsScreen, gbc);
 
-        backButton = new JButton(new ImageIcon("res/button/back.png"));
+        backButton = new JButton(new ImageIcon("src/res/button/back.png"));
         backButton.setPreferredSize(new Dimension(100, 50));
         backButton.addActionListener(new ActionListener() {
             @Override

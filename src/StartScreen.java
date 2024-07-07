@@ -14,14 +14,14 @@ public class StartScreen extends JPanel {
         setLayout(new BorderLayout()); // Set layout to border layout
 
         // Create background label
-        JLabel background = new JLabel(new ImageIcon("res/background/background2.jpg"));
+        JLabel background = new JLabel(new ImageIcon("src/res/background/background2.jpg"));
         add(background);
         background.setLayout(new GridBagLayout());
 
         // Create buttons with images
-        playButton = new JButton(new ImageIcon("res/button/start_game.png"));
-        controlsButton = new JButton(new ImageIcon("res/button/controlss.png"));
-        highscoreButton = new JButton(new ImageIcon("res/button/highscore.png"));
+        playButton = new JButton(new ImageIcon("src/res/button/start_game.png"));
+        controlsButton = new JButton(new ImageIcon("src/res/button/controlss.png"));
+        highscoreButton = new JButton(new ImageIcon("src/res/button/highscore.png"));
 
         // Remove default button styling
         playButton.setBorderPainted(false);

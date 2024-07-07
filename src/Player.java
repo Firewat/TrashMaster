@@ -49,14 +49,14 @@ public class Player {
         int tileSize = gamePanel.getTileSize();
 
         // Laden und Skalieren der Bilder für die verschiedenen Animationen des Spielers
-        this.imageLeft1 = new ImageIcon("res/player/player5.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        this.imageLeft2 = new ImageIcon("res/player/player6.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        this.imageRight1 = new ImageIcon("res/player/player3.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        this.imageRight2 = new ImageIcon("res/player/player4.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        Image imageUp1 = new ImageIcon("res/player/player7.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        Image imageUp2 = new ImageIcon("res/player/player8.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        Image imageDown1 = new ImageIcon("res/player/player1.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        Image imageDown2 = new ImageIcon("res/player/player2.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        this.imageLeft1 = new ImageIcon("src/res/player/player5.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        this.imageLeft2 = new ImageIcon("src/res/player/player6.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        this.imageRight1 = new ImageIcon("src/res/player/player3.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        this.imageRight2 = new ImageIcon("src/res/player/player4.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        Image imageUp1 = new ImageIcon("src/res/player/player7.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        Image imageUp2 = new ImageIcon("src/res/player/player8.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        Image imageDown1 = new ImageIcon("src/res/player/player1.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        Image imageDown2 = new ImageIcon("src/res/player/player2.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
         // Init Bild und Bewegung
         this.image = imageRight1;
         this.direction = Direction.NONE;

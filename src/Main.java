@@ -8,10 +8,10 @@ public class Main extends JFrame {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(true);
-        window.setTitle("Trash Meister");
+        window.setTitle("Trash Master");
 
-        StartScreen startScreen = new StartScreen(window); // Pass window to StartScreen
-        startScreen.setPreferredSize(new Dimension(720, 540)); // Set size of the start screen
+        StartScreen startScreen = new StartScreen(window);
+        startScreen.setPreferredSize(new Dimension(720, 540));
         window.add(startScreen);
         window.pack();
         window.setLocationRelativeTo(null);

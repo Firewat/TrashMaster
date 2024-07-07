@@ -11,19 +11,19 @@ public class StartScreen extends JPanel {
 
     public StartScreen(JFrame window) {
         this.window = window;
-        setLayout(new BorderLayout()); // Set layout to border layout
+        setLayout(new BorderLayout());
 
-        // Create background label
-        JLabel background = new JLabel(new ImageIcon("res/background/background2.jpg"));
+        // Background hinzufügen
+        JLabel background = new JLabel(new ImageIcon("src/res/background/background2.jpg"));
         add(background);
         background.setLayout(new GridBagLayout());
 
-        // Create buttons with images
-        playButton = new JButton(new ImageIcon("res/button/start_game.png"));
-        controlsButton = new JButton(new ImageIcon("res/button/controlss.png"));
-        highscoreButton = new JButton(new ImageIcon("res/button/highscore.png"));
+        // Buttons mit Bildern
+        playButton = new JButton(new ImageIcon("src/res/button/start_game.png"));
+        controlsButton = new JButton(new ImageIcon("src/res/button/controlss.png"));
+        highscoreButton = new JButton(new ImageIcon("src/res/button/highscore.png"));
 
-        // Remove default button styling
+        // default styling entfernen
         playButton.setBorderPainted(false);
         playButton.setContentAreaFilled(false);
         controlsButton.setBorderPainted(false);
@@ -31,7 +31,7 @@ public class StartScreen extends JPanel {
         highscoreButton.setBorderPainted(false);
         highscoreButton.setContentAreaFilled(false);
 
-        // Add action listeners to buttons
+        // Action Listerner GamePanel
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -46,7 +46,7 @@ public class StartScreen extends JPanel {
                 gamePanel.startGame(); // Start the game
             }
         });
-
+        //ActionListener ControlsScreen
         controlsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -58,7 +58,7 @@ public class StartScreen extends JPanel {
                 window.repaint();
             }
         });
-
+        //ActionListener HighScoreScreen
         highscoreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -74,7 +74,7 @@ public class StartScreen extends JPanel {
             }
         });
 
-        // Add buttons to panel
+        // buttons zum panel hinzufügen
         background.add(playButton);
         background.add(controlsButton);
         background.add(highscoreButton);

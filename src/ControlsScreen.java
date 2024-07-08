@@ -47,7 +47,7 @@ public class ControlsScreen extends JPanel {
         // backbutton hinzufügen
         backButton = new JButton(new ImageIcon("src/res/button/back.png"));
         backButton.setPreferredSize(new Dimension(100, 50));
-        backButton.addActionListener(e -> navigateToStartScreen());
+        backButton.addActionListener(e -> HighScoreScreen.navigateToStartScreen());
         backButton.setBorderPainted(false);
         backButton.setContentAreaFilled(false);
         gbc.gridy = 1;
@@ -56,18 +56,6 @@ public class ControlsScreen extends JPanel {
         add(backButton, gbc);
     }
 
-    private void navigateToStartScreen() {
-        if (window != null) {
-            window.getContentPane().removeAll();
-            StartScreen startScreen = new StartScreen(window);
-            startScreen.setPreferredSize(new Dimension(720, 540));
-            window.add(startScreen);
-            window.revalidate();
-            window.repaint();
-        } else {
-            System.out.println("Window is null");
-        }
-    }
 
     @Override
     protected void paintComponent(Graphics g) {

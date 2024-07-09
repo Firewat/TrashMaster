@@ -1,0 +1,17 @@
+Steuerung:
+
+Bewegung:
+- W: Bewege dich nach oben
+- A: Bewege dich nach links
+- S: Bewege dich nach unten
+- D: Bewege dich nach rechts
+
+Ziel:
+Dein Ziel ist es, den Müllgegenstand aufzusammeln,
+der dir oben links auf dem Bildschirm in Rot angezeigt wird.
+Bewege deinen Charakter mithilfe der W,A,S,D-Tasten,
+um den Müll zu finden und aufzusammeln.
+
+Sammle den richtigen Müll und vermeide falsche Gegenstände,
+um Leben zu sparen und das Spiel erfolgreich zu meistern!
+

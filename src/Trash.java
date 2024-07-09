@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 public class Trash {
     private int x;
@@ -8,7 +9,7 @@ public class Trash {
     private String type;
     private String category; // New field for category
 
-    public Trash(int x, int y, String imagePath, String type, String category) {
+    public Trash(int x, int y, URL imagePath, String type, String category) {
         this.x = x;
         this.y = y;
         this.image = new ImageIcon(imagePath).getImage();

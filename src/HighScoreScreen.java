@@ -12,7 +12,7 @@ public class HighScoreScreen extends JPanel {
         setLayout(new BorderLayout());
 
         // Background hinzufügen
-        JLabel background = new JLabel(new ImageIcon("src/res/background/background2.jpg"));
+        JLabel background = new JLabel(new ImageIcon(getClass().getResource("/res/background/background2.jpg")));
         add(background);
         background.setLayout(new GridBagLayout());
 
@@ -30,7 +30,7 @@ public class HighScoreScreen extends JPanel {
         loadHighScores();
         contentPanel.add(new JScrollPane(highScores), BorderLayout.CENTER);
 
-        JButton backButton = new JButton(new ImageIcon("src/res/button/back.png"));
+        JButton backButton = new JButton(new ImageIcon(getClass().getResource("/res/button/back.png")));
         backButton.setPreferredSize(new Dimension(100, 50));
         backButton.setBorderPainted(false);
         backButton.setContentAreaFilled(false);
@@ -42,7 +42,8 @@ public class HighScoreScreen extends JPanel {
 
     private void loadHighScores() {
         highScores.setText("");
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/res/highscore/highscores.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                getClass().getResourceAsStream("/res/highscore/highscores.txt")))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 highScores.append(line + "\n");
@@ -54,7 +55,8 @@ public class HighScoreScreen extends JPanel {
 
     public void updateHighScores(String name, int score) {
         TreeMap<Integer, String> scoresMap = new TreeMap<>(Collections.reverseOrder());
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/res/highscore/highscores.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                getClass().getResourceAsStream("/res/highscore/highscores.txt")))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(":");
@@ -68,7 +70,8 @@ public class HighScoreScreen extends JPanel {
 
         scoresMap.put(score, name);
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/res/highscore/highscores.txt"))) {
+        // Update the scores file on the disk
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(getClass().getResource("/res/highscore/highscores.txt").toURI())))) {
             int count = 0;
             for (Map.Entry<Integer, String> entry : scoresMap.entrySet()) {
                 if (count >= 10) break;
@@ -76,14 +79,14 @@ public class HighScoreScreen extends JPanel {
                 writer.newLine();
                 count++;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         loadHighScores();
     }
 
-    static void navigateToStartScreen() {
+    void navigateToStartScreen() {
         if (window != null) {
             window.getContentPane().removeAll();
             StartScreen startScreen = new StartScreen(window);

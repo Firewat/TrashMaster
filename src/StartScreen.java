@@ -13,15 +13,21 @@ public class StartScreen extends JPanel {
         this.window = window;
         setLayout(new BorderLayout());
 
+        // Bilder laden
+        ImageIcon bgIcon = new ImageIcon(getClass().getResource("/res/background/background2.jpg"));
+        ImageIcon startBIcon = new ImageIcon(getClass().getResource("/res/start_game.png"));
+        ImageIcon controlsBIcon = new ImageIcon(getClass().getResource("/res/controlss.png"));
+        ImageIcon highscoreBIcon = new ImageIcon(getClass().getResource("/res/highscore.png"));
+
         // Background hinzufügen
-        JLabel background = new JLabel(new ImageIcon("src/res/background/background2.jpg"));
+        JLabel background = new JLabel(bgIcon);
         add(background);
         background.setLayout(new GridBagLayout());
 
         // Buttons mit Bildern
-        playButton = new JButton(new ImageIcon("src/res/button/start_game.png"));
-        controlsButton = new JButton(new ImageIcon("src/res/button/controlss.png"));
-        highscoreButton = new JButton(new ImageIcon("src/res/button/highscore.png"));
+        playButton = new JButton(startBIcon);
+        controlsButton = new JButton(controlsBIcon);
+        highscoreButton = new JButton(highscoreBIcon);
 
         // default styling entfernen
         playButton.setBorderPainted(false);
@@ -31,7 +37,7 @@ public class StartScreen extends JPanel {
         highscoreButton.setBorderPainted(false);
         highscoreButton.setContentAreaFilled(false);
 
-        // Action Listerner GamePanel
+        // Action Listener für GamePanel
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -46,7 +52,8 @@ public class StartScreen extends JPanel {
                 gamePanel.startGame(); // Start the game
             }
         });
-        //ActionListener ControlsScreen
+
+        // ActionListener für ControlsScreen
         controlsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -58,25 +65,31 @@ public class StartScreen extends JPanel {
                 window.repaint();
             }
         });
-        //ActionListener HighScoreScreen
+
+        // ActionListener für HighScoreScreen
         highscoreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 window.getContentPane().removeAll();
-                //JLabel background = new JLabel(new ImageIcon("res/background/background2.jpg"));
-
                 HighScoreScreen highScoreScreen = new HighScoreScreen(window);
                 highScoreScreen.setPreferredSize(new Dimension(720, 540));
                 window.add(highScoreScreen);
                 window.revalidate();
                 window.repaint();
-
             }
         });
 
         // buttons zum panel hinzufügen
-        background.add(playButton);
-        background.add(controlsButton);
-        background.add(highscoreButton);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        background.add(playButton, gbc);
+
+        gbc.gridy = 1;
+        background.add(controlsButton, gbc);
+
+        gbc.gridy = 2;
+        background.add(highscoreButton, gbc);
     }
 }

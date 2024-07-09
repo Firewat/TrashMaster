@@ -6,7 +6,7 @@ public class Tile {
     private int type;
 
     public Tile(String imagePath, int type) {
-        this.image = new ImageIcon(imagePath).getImage();
+        this.image = new ImageIcon(getClass().getResource(imagePath)).getImage();
         this.type = type;
     }
 

@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -13,8 +13,8 @@ public class GamePanel extends JPanel {
     private Map<String, String> trashCategories;
     private final JFrame window;
     public static final int TILE_SIZE = 32;
-    public static int MAP_WIDTH = 20;
-    public static int MAP_HEIGHT = 15;
+    public static int MAP_WIDTH;
+    public static int MAP_HEIGHT;
     private String playerName;
     private final HighScoreScreen highScoreScreen;
     private final Player player;
@@ -32,19 +32,18 @@ public class GamePanel extends JPanel {
     int mapWidth = 0;
     int mapHeight = 0;
 
-//////////////////////////////KONSTRUKTOR///////////////////////////////////////////////
+    //////////////////////////////KONSTRUKTOR///////////////////////////////////////////////
     public GamePanel(JFrame window) {
         //highscore init
         promptForName();
         this.highScoreScreen = new HighScoreScreen(window);
 
-
-
         // window init
         this.window = window;
 
         //world init
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/res/map/worldmap.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                getClass().getResourceAsStream("/worldmap.txt")))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 mapWidth = Math.max(mapWidth, line.length());
@@ -58,10 +57,9 @@ public class GamePanel extends JPanel {
         MAP_HEIGHT = mapHeight;
         initializeWorldMap();
 
-
         //spieler und kamera init
         player = new Player((double) MAP_WIDTH / 2, (double) MAP_HEIGHT / 2,
-                "src/res/player/player3.png", this);
+                getClass().getResource("/res/player/player4.png").toString(), this);
         cameraX = (int) (player.getX() * TILE_SIZE - window.getWidth() / 2);
         cameraY = (int) (player.getY() * TILE_SIZE - window.getHeight() / 2);
 
@@ -90,8 +88,6 @@ public class GamePanel extends JPanel {
         //Müll init
         trashCategories = new HashMap<>();
         initializeTrashItems();
-
-
     }
 
     //////////////////////////METHODEN///////////////////////////////////////////////
@@ -99,7 +95,8 @@ public class GamePanel extends JPanel {
     //Methode um WeltKarte zu generieren
     private void initializeWorldMap() {
         worldMap = new Tile[MAP_HEIGHT][MAP_WIDTH];
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/res/map/worldmap.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                getClass().getResourceAsStream("/worldmap.txt")))) {
             String[] tileTypes = {"type1", "type2", "type3", "type4", "type5", "type6", "type7", "type8", "type9",
                     "type10", "type11", "type12", "type13", "type14", "type15", "type16", "type17"};
             String line;
@@ -108,9 +105,9 @@ public class GamePanel extends JPanel {
                 for (int col = 0; col < line.length() && col < MAP_WIDTH; col++) {
                     int type = Character.getNumericValue(line.charAt(col));
                     if (type > 0) {
-                        worldMap[row][col] = new Tile("src/res/worldtiles/" + tileTypes[type - 1] + ".png", type);
+                        worldMap[row][col] = new Tile("/res/worldtiles/" + tileTypes[type - 1] + ".png", type);
                     } else {
-                        worldMap[row][col] = new Tile("src/res/worldtiles/" + tileTypes[1] + ".png", 2);
+                        worldMap[row][col] = new Tile("/res/worldtiles/" + tileTypes[1] + ".png", 2);
                     }
                 }
                 row++;
@@ -148,7 +145,6 @@ public class GamePanel extends JPanel {
 
         //mögliche Müllkategorien (nicht optimal gelöst)
         List<String> collectibleCategories = Arrays.asList("gelber müll", "sondermüll", "papier müll", "glas müll");
-        trashTypeToCollect = collectibleCategories.get((int) (Math.random() * collectibleCategories.size()));
 
         //nicht zweimal an einem ort müll generieren
         Set<Point> usedPositions = new HashSet<>();
@@ -166,30 +162,29 @@ public class GamePanel extends JPanel {
             usedPositions.add(pos);
             String itemName = trashTypes[(int) (Math.random() * trashTypes.length)];
             String category = trashCategories.get(itemName);
-            trashItems.add(new Trash(x, y, "src/res/items/" + itemName + ".png", itemName, category));
+            trashItems.add(new Trash(x, y, getClass().getResource("/res/items/" + itemName + ".png"), itemName, category));
         }
 
         //Müll für die "Quest" wird generiert
         trashTypeToCollect = collectibleCategories.get((int) (Math.random() * collectibleCategories.size()));
     }
 
+    // Methode um zufälliges Müll-Objekt zu generieren
+    // private String getRandomItemNameOfCategory(String category) {
+    //     List<String> itemsOfCategory = new ArrayList<>();
+    //     for (Map.Entry<String, String> entry : trashCategories.entrySet()) {
+    //         if (entry.getValue().equals(category)) {
+    //             itemsOfCategory.add(entry.getKey());
+    //         }
+    //     }
+    //     if (!itemsOfCategory.isEmpty()) {
+    //         return itemsOfCategory.get((int) (Math.random() * itemsOfCategory.size()));
+    //     } else {
+    //         return null;
+    //     }
+    // }
 
-        //Methode um zufälliges Müll-Objekt zu generieren
-        private String getRandomItemNameOfCategory(String category) {
-            List<String> itemsOfCategory = new ArrayList<>();
-            for (Map.Entry<String, String> entry : trashCategories.entrySet()) {
-                if (entry.getValue().equals(category)) {
-                    itemsOfCategory.add(entry.getKey());
-            }
-        }
-        if (!itemsOfCategory.isEmpty()) {
-            return itemsOfCategory.get((int) (Math.random() * itemsOfCategory.size()));
-        } else {
-            return null;
-        }
-    }
-
-//////////RENDER METHODEN///////////////////////////////////////////////
+    //////////RENDER METHODEN///////////////////////////////////////////////
 
     private void renderWorld(Graphics g) {
         int startRow = Math.max(0, cameraY / TILE_SIZE);
@@ -204,6 +199,7 @@ public class GamePanel extends JPanel {
             }
         }
     }
+
     //Methode um Müll zu rendern
     private void renderTrash(Graphics g) {
         for (Trash trash : trashItems) {
@@ -245,7 +241,6 @@ public class GamePanel extends JPanel {
         g.drawString("Next Round", 360, 20);
     }
 
-
     //paintComponent Methode (Herzstück des Renderings)
     @Override
     protected void paintComponent(Graphics g) {
@@ -258,9 +253,11 @@ public class GamePanel extends JPanel {
         if (displayNextRound) {
             renderNextRound(g);
         }
-
     }
 
+    // public String getTrashTypeToCollect() {
+    //     return trashTypeToCollect = trashItems.get((int) (Math.random() * trashItems.size())).getType();
+    // }
 
     //////////////////KAMERA POSITIONIERUNG///////////////////////////////////////////////
     public void setCameraPosition(int cameraX, int cameraY) {
@@ -268,8 +265,8 @@ public class GamePanel extends JPanel {
         int maxCameraY = Math.max(0, MAP_HEIGHT * TILE_SIZE - window.getHeight());
 
         this.cameraX = Math.max(0, Math.min(cameraX, maxCameraX));
-        this.cameraY = Math.max(0, Math.min(cameraY, maxCameraY));}
-
+        this.cameraY = Math.max(0, Math.min(cameraY, maxCameraY));
+    }
 
     //////////////////SPIEL START UND BEENDEN METHODEN////////////////////////////////////
     public void startGame() {
@@ -292,6 +289,11 @@ public class GamePanel extends JPanel {
     private void resetGameTime() {
         player.resetMovement();
         roundTime = 30 - round;
+        if (roundTime >= 7) {
+            roundTime = 30 - round;
+        } else if (roundTime <= 6) {
+            roundTime = 7;
+        }
         collectedItems = 0;
         player.setPosition(MAP_WIDTH / 2, MAP_HEIGHT / 2);
         initializeTrashItems();
@@ -299,16 +301,14 @@ public class GamePanel extends JPanel {
 
     // nächste Runde starten
     public void nextRound() {
-        //this.displayNextRound = displayNextRound ;
         displayNextRound = true;
         new Timer(3000, e -> displayNextRound = false).start();
         round++;
         collectedItems = 0;
         roundTime = 30 - round;
+
         trashTypeToCollect = trashItems.get((int) (Math.random() * trashItems.size())).getType();
         initializeTrashItems();
-        //player.getInventory().clear();
-       // player.setPosition(MAP_WIDTH / 2, MAP_HEIGHT / 2);
         repaint();
     }
 
@@ -334,7 +334,7 @@ public class GamePanel extends JPanel {
         if (response == JOptionPane.YES_OPTION) {
             resetGame();
             startGame();
-        } else if (response == JOptionPane.NO_OPTION){
+        } else if (response == JOptionPane.NO_OPTION) {
             window.getContentPane().removeAll();
             StartScreen startScreen = new StartScreen(window);
             startScreen.setPreferredSize(new Dimension(720, 540));
@@ -344,7 +344,6 @@ public class GamePanel extends JPanel {
         }
         highScoreScreen.updateHighScores(playerName, round);
     }
-
 
     ///UPDATE METHODE (SPIELER BEWEGUNG, KAMERA, MÜLL EINSAMMELN, ETC.)//////////////////////
     public void update() {
@@ -361,7 +360,6 @@ public class GamePanel extends JPanel {
 
         for (Trash trash : new ArrayList<>(trashItems)) {
             if ((int) player.getX() == trash.getX() && (int) player.getY() == trash.getY()) {
-                //player.addToInventory(trash);
                 trashItems.remove(trash);
                 if (trash.getCategory().equals(trashTypeToCollect)) {
                     collectedItems++;
@@ -382,15 +380,12 @@ public class GamePanel extends JPanel {
         repaint();
     }
 
-
     //Getter Methoden und misc. Methoden
     public int getTileSize() {
-
         return TILE_SIZE;
     }
 
     public Trash[] getTrashItems() {
-
         return trashItems.toArray(new Trash[0]);
     }
 

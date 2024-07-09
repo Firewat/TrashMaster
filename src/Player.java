@@ -49,14 +49,14 @@ public class Player {
         int tileSize = gamePanel.getTileSize();
 
         // Laden und Skalieren der Bilder für die verschiedenen Animationen des Spielers
-        this.imageLeft1 = new ImageIcon("src/res/player/player5.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        this.imageLeft2 = new ImageIcon("src/res/player/player6.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        this.imageRight1 = new ImageIcon("src/res/player/player3.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        this.imageRight2 = new ImageIcon("src/res/player/player4.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        Image imageUp1 = new ImageIcon("src/res/player/player7.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        Image imageUp2 = new ImageIcon("src/res/player/player8.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        Image imageDown1 = new ImageIcon("src/res/player/player1.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
-        Image imageDown2 = new ImageIcon("src/res/player/player2.png").getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        this.imageLeft1 = new ImageIcon(getClass().getResource("res/player/player5.png")).getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        this.imageLeft2 = new ImageIcon(getClass().getResource("res/player/player6.png")).getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        this.imageRight1 = new ImageIcon(getClass().getResource("res/player/player3.png")).getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        this.imageRight2 = new ImageIcon(getClass().getResource("res/player/player4.png")).getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        Image imageUp1 = new ImageIcon(getClass().getResource("res/player/player5.png")).getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        Image imageUp2 = new ImageIcon(getClass().getResource("res/player/player6.png")).getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        Image imageDown1 = new ImageIcon(getClass().getResource("res/player/player1.png")).getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
+        Image imageDown2 = new ImageIcon(getClass().getResource("res/player/player2.png")).getImage().getScaledInstance(tileSize, tileSize, Image.SCALE_SMOOTH);
         // Init Bild und Bewegung
         this.image = imageRight1;
         this.direction = Direction.NONE;
@@ -125,13 +125,13 @@ public class Player {
         }
 
         // Überprüfen, ob der Spieler sich auf derselben Kachel wie ein Müllitem befindet
-        for (Trash trash : gamePanel.getTrashItems()) {
-            if (isOnSameTile(trash)) {
-                //addToInventory(trash);
-                // gamePanel.removeTrashItem(trash); // Annahme: Methode zum Entfernen eines Müllitems
-                break;
-            }
-        }
+//        for (Trash trash : gamePanel.getTrashItems()) {
+//            if (isOnSameTile(trash)) {
+//                //addToInventory(trash);
+//                // gamePanel.removeTrashItem(trash); // Annahme: Methode zum Entfernen eines Müllitems
+//                break;
+//            }
+//        }
     }
 
     // Getter und Setter für die xy-Position und dxy (richtung)
@@ -191,15 +191,15 @@ public class Player {
     }
 
     // Hinzufügen eines Müllitems zum Inventar des Spielers
-    public void addToInventory(Trash trash) {
-       // inventory.add(trash);
-    }
+//    public void addToInventory(Trash trash) {
+//       // inventory.add(trash);
+//    }
 
     // Getter für das Inventar
-    public List<Trash> getInventory() {
-       // return inventory;
-        return null;
-    }
+//    public List<Trash> getInventory() {
+//       // return inventory;
+//        return null;
+//    }
 
     // Setzen der Spielerposition
     public void setPosition(double x, double y) {
@@ -208,18 +208,18 @@ public class Player {
     }
 
     // Überprüfen, ob sich der Spieler auf selbe Tile wie ein Müllitem befindet
-    private boolean isOnSameTile(Trash trash) {
-        int tileSize = gamePanel.getTileSize();
-
-        // Berechnung der Kachel des Spielers
-        int playerTileX = (int) x / tileSize;
-        int playerTileY = (int) y / tileSize;
-
-        // Berechnung der Kachel des Müllitems
-        int trashTileX =  trash.getX() / tileSize;
-        int trashTileY =  trash.getY() / tileSize;
-
-        // Überprüfen, ob mehr als 50% des Spielers mit der Tiles des Müllitems überlappt
-        return Math.abs(playerTileX - trashTileX) * 3 < tileSize && Math.abs(playerTileY - trashTileY) * 2 < tileSize;
-    }
+//    private boolean isOnSameTile(Trash trash) {
+//        int tileSize = gamePanel.getTileSize();
+//
+//        // Berechnung der Kachel des Spielers
+//        int playerTileX = (int) x / tileSize;
+//        int playerTileY = (int) y / tileSize;
+//
+//        // Berechnung der Kachel des Müllitems
+//        int trashTileX =  trash.getX() / tileSize;
+//        int trashTileY =  trash.getY() / tileSize;
+//
+//        // Überprüfen, ob mehr als 50% des Spielers mit der Tiles des Müllitems überlappt
+//        return Math.abs(playerTileX - trashTileX) * 3 < tileSize && Math.abs(playerTileY - trashTileY) * 2 < tileSize;
+//    }
 }
